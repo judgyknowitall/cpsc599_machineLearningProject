@@ -12,7 +12,7 @@ Main Function
 from preprocess import preprocess
 from dnn import train_dnn
 from bayes import train_bayes
-from linReg import train_linReg
+from logReg import train_logReg
 from evaluate import compare_models
 
 
@@ -25,11 +25,11 @@ def main():
     # Create models
     dnn = train_dnn(data)
     bayes = train_bayes(data)
-    linReg = train_linReg(data)
+    logReg = train_logReg(data)
     
     
     # Compare and Evaluate models
-    models = [dnn, bayes, linReg]
+    models = [dnn, bayes, logReg]
     best_model = compare_models(models)
     
     

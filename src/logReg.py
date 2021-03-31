@@ -5,11 +5,11 @@ Team 7
 
 @author: Abdullah
 
-Data Pre-processing
+Logistic Regression model
 """
 
-def train_linReg(data):
+def train_logReg(data):
     
-    print("Training Linear Regression Model ...")
+    print("Training Logistic Regression Model ...")
     
     # TODO...
