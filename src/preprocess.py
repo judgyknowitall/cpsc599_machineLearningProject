@@ -94,6 +94,7 @@ def preprocess():
     print(df['Age_Bracket'].value_counts())
     print(df['Gender'].value_counts())
     print(df['Contact'].value_counts())
+    print() # newline
     
     #Save dataframe to csv
     df.to_csv('../data/Processed-Data.csv', index=False)

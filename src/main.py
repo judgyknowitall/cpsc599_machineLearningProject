@@ -33,7 +33,7 @@ def read_processed_data():
     # Read and split processed data properly
     processed_dat = pandas.read_csv('../data/Processed-Data.csv')
     y = processed_dat.Severity
-    x = processed_dat.drop('Severity', axis='columns')
+    x = processed_dat.drop("Severity", axis=1).drop("Contact", axis=1)
     
     # Return tuple (X_train, X_test, y_train, y_test)
     X_train, X_test, y_train, y_test = train_test_split(x, y, stratify=y, train_size=0.7, test_size=0.3, shuffle=True)

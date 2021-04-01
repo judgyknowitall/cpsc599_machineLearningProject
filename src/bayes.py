@@ -19,4 +19,5 @@ def train_bayes(X_train, y_train):
     bayes = MultinomialNB()
     bayes.fit(X_train, y_train)
         
+    print() # newline    
     return bayes

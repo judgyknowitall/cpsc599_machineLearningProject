@@ -13,3 +13,5 @@ def train_dnn(X_train, y_train):
     
     # TODO...
 
+    print() # newline
+    return

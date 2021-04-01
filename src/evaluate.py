@@ -27,5 +27,6 @@ def compare_models(models, X_test, y_test):
         if score > best_score:
             best_score = score
             best_model_index = i
-
+    
+    print() # newline
     return best_model_index, best_score
