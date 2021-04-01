@@ -98,5 +98,5 @@ def preprocess():
     #Save dataframe to csv
     df.to_csv('../data/Processed-Data.csv', index=False)
     
-preprocess()
+#preprocess()
 

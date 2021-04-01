@@ -5,11 +5,18 @@ Team 7
 
 @author: Zahra
 
-Data Pre-processing
+Create and Train a Naive Multinomial Bayes Model
 """
 
-def train_bayes(data):
+from sklearn.naive_bayes import MultinomialNB
+
+
+
+def train_bayes(X_train, y_train):
     
     print("Training Multinomial Bayes Model ...")
-    
-    # TODO...
+        
+    bayes = MultinomialNB()
+    bayes.fit(X_train, y_train)
+        
+    return bayes

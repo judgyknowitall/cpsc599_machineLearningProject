@@ -8,7 +8,7 @@ Team 7
 Logistic Regression model
 """
 
-def train_logReg(data):
+def train_logReg(X_train, y_train):
     
     print("Training Logistic Regression Model ...")
     
