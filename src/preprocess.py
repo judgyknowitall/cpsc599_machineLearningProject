@@ -80,10 +80,10 @@ def preprocess():
     
     #Insert Contact column and populate
     #Mapping: 0='Contact_No', 1='Contact_Yes', 2='Contact_Dont-Know'
-    df['Contact'] = df.apply (lambda row: label_severity(row), axis=1)
+    df['Contact'] = df.apply (lambda row: label_contact(row), axis=1)
     
     #Remove columns: Country(Not applicable), None_Experiencing(Redundant), Rest(Compressed)
-    df = df.drop(columns = ['Country', 'None_Experiencing', 'Age_0-9', 'Age_10-19', 'Age_20-24'
+    df = df.drop(columns = ['None_Sympton','Country', 'None_Experiencing', 'Age_0-9', 'Age_10-19', 'Age_20-24'
                             , 'Age_25-59', 'Age_60+', 'Gender_Female', 'Gender_Male', 'Gender_Transgender'
                             , 'Severity_Mild', 'Severity_Moderate', 'Severity_None', 'Severity_Severe'
                             , 'Contact_Dont-Know', 'Contact_No', 'Contact_Yes'])
