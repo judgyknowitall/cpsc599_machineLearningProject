@@ -22,7 +22,7 @@ from logReg import train_logReg
 from evaluate import compare_models
 
 
-
+# Read CSV files and extract features and labels
 def read_processed_data():
     
     # Preprocess data if not done so already
@@ -33,36 +33,34 @@ def read_processed_data():
     # Read and split processed data properly
     processed_dat = pandas.read_csv('../data/Processed-Data.csv')
     y = processed_dat.Severity
-    x = processed_dat.drop("Severity", axis=1).drop("Contact", axis=1)
+    x = processed_dat.drop("Severity", axis=1)
     
-    # Return tuple (X_train, X_test, y_train, y_test)
-    X_train, X_test, y_train, y_test = train_test_split(x, y, stratify=y, train_size=0.7, test_size=0.3, shuffle=True)
-
-    
-    return (X_train, y_train), (X_test, y_test)
+    return x, y
 
 
+# Main function
 def main():
 
     # train_data = (X_train, y_train), test_data = (X_test, y_test)
-    train_data, test_data = read_processed_data()
+    x, y = read_processed_data()
+    X_train, X_test, y_train, y_test = train_test_split(x, y, stratify=y, train_size=0.7, shuffle=True)
     
     # Create models
-    dnn = train_dnn(*train_data)
-    bayes = train_bayes(*train_data)
-    logReg = train_logReg(*train_data)
+    dnn = train_dnn(X_train, y_train)
+    bayes = train_bayes(X_train, y_train)
+    logReg = train_logReg(X_train, y_train)
     
     
     # Compare and Evaluate models
     models = [dnn, bayes, logReg]
-    best_model_index, _ = compare_models(models, *test_data)
+    best_model_index, _ = compare_models(models, X_test, y_test)
     
     if (best_model_index == 0):
         print("The Best model was: DNN")
     elif (best_model_index == 1):
         print("The Best model was: Bayes")
     elif (best_model_index == 2):
-        print("The Best model was: Regressin")
+        print("The Best model was: Regression")
     
     
     # Test user's case
