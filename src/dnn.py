@@ -7,9 +7,11 @@ Team 7
 """
 
 
-def train_dnn(data):
+def train_dnn(X_train, y_train):
     
     print("Training Deep Neural Network ...")
     
     # TODO...
 
+    print() # newline
+    return
