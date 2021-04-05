@@ -31,19 +31,17 @@ def read_processed_data():
         #preprocess() #TODO
     
     # Read and split processed data properly
-    processed_dat = pandas.read_csv('../data/Processed-Data.csv')
-    y = processed_dat.Severity
-    x = processed_dat.drop("Severity", axis=1)
+    data = pandas.read_csv('../data/Processed-Data.csv')   
     
-    return x, y
+    return data
 
 
 # Main function
 def main():
 
     # train_data = (X_train, y_train), test_data = (X_test, y_test)
-    x, y = read_processed_data()
-    X_train, X_test, y_train, y_test = train_test_split(x, y, stratify=y, train_size=0.7, shuffle=True)
+    data = read_processed_data()
+    X_train, X_test, y_train, y_test = train_test_split(data, data.Severity, stratify=data.Severity, train_size=0.7, shuffle=True)
     
     # Create models
     dnn = train_dnn(X_train, y_train)
