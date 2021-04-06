@@ -13,11 +13,15 @@ Returns the model with the highest accuracy.
 
 References:
     https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html
+    https://stackoverflow.com/questions/54589669/confusion-matrix-error-classification-metrics-cant-handle-a-mix-of-multilabel
 """
 
+import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.metrics import plot_confusion_matrix
-from sklearn.metrics import f1_score
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import f1_score, accuracy_score
+from tensorflow.keras.utils import to_categorical
+
 
 # Calculate accuracies
 def compare_models(models, X_test, y_test):
@@ -29,13 +33,17 @@ def compare_models(models, X_test, y_test):
     
     for i in range(len(models)):
         
-        #TODO: temporary, delete later
+        # No model should be empty
         if (models[i] == None):
             continue
     
-        
+        # Calculate prediction and make sure labels are single-digit instead of oneHot encoded
+        y_pred = models[i].predict(X_test)
+        if (i == 0):
+            y_pred = np.argmax(y_pred, axis=1)
+    
         # Calculate accuracy
-        score = models[i].score(X_test, y_test)
+        score = accuracy_score(y_test, y_pred)
         
         # Update best model
         if score > best_score:
@@ -44,14 +52,24 @@ def compare_models(models, X_test, y_test):
             
             
         # Extra Evaluations
-        plot_conf_matrix(models[i], X_test, y_test)
-        f1 = f1_score(y_test, models[i].predict(X_test), average='macro') 
+        
+        # F1 score
+        f1 = 0
+        if (i != 0):
+            f1 = f1_score(y_test, models[i].predict(X_test), average='macro') 
+        
         
         # Print results
         print("Model", i)
         print("\tAccuracy =  {:.3f}".format(score))
-        print("\tF1 scores = {:.3f}\n".format(f1))
+        
+        if (f1 != 0):
+            print("\tF1 scores = {:.3f}".format(f1))
+        
+        plot_conf_matrix(y_test, y_pred, "Model " + str(i))
 
+            
+        print() # newline
 
     
     print() # newline
@@ -60,9 +78,14 @@ def compare_models(models, X_test, y_test):
 
 
 # Plot confusion matrix
-def plot_conf_matrix(model, X_test, y_test):
+def plot_conf_matrix(y_test, y_pred, model_name):
     
-    disp = plot_confusion_matrix(model, X_test, y_test,cmap=plt.cm.Blues)
-    disp.ax_.set_title("Confusion matrix")
+    # Calculate matrix
+    cm = confusion_matrix(y_test, y_pred, labels=[0,1,2,3])
+    
+    # Plot
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+    disp.plot(cmap=plt.cm.Blues)
+    disp.ax_.set_title(model_name + " Confusion Matrix")
     
     plt.show()

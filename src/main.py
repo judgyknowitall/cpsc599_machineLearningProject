@@ -50,7 +50,7 @@ def main():
 
     # Compare and Evaluate models
     models = [dnn, bayes, logReg]
-    best_model_index, _ = compare_models(models, X_test, y_test)
+    best_model_index, best_score = compare_models(models, X_test, y_test)
 
     if (best_model_index == 0):
         print("The Best model was: DNN")
@@ -58,7 +58,8 @@ def main():
         print("The Best model was: Bayes")
     elif (best_model_index == 2):
         print("The Best model was: Regression")
-
+    
+    print("The Highest score was: {:.3f}".format(best_score))
 
     # Test user's case
     # TODO...
