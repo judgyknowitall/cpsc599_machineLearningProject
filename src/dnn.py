@@ -19,13 +19,17 @@ import pandas
 
 def read_data():
     #Read the data in and perform the split
-    filename = '../data/Experimental-Data.csv'
-    data = pandas.read_csv(filename)
-    print(data.shape[0])
-
+    filename = '../data/Small-Data.csv'
+    data = pandas.read_csv(filename, index_col=False)
     
-    X_train, X_test, y_train, y_test = train_test_split(data.drop('Severity', axis=1), data.Severity, train_size=0.9, test_size=0.1)
+
+    y = data.Severity
+    #x = data.drop("Severity", axis=1)
+    x = data.Fever
+    
+    X_train, X_test, y_train, y_test = train_test_split(x, y, train_size=0.7, test_size=0.3)
     return X_train, X_test, y_train, y_test
+
 
 def train_dnn():
     
@@ -33,23 +37,31 @@ def train_dnn():
     print("Training Deep Neural Network ...")
     
     #One-hot encode labels
-    y_train = to_categorical(y_train, 4)
-    y_test = to_categorical(y_test, 4)
+    y_train = to_categorical(y_train, num_classes=2)
+    y_test = to_categorical(y_test, num_classes=2)
+    
+    print("X_train shape: {}, y_train shape: {}".format(X_train.shape, y_train.shape))
+    print("X_test shape: {}, y_test shape: {}".format(X_test.shape, y_test.shape))
     
     #Create model
     model = Sequential()
-    model.add(Dense(len(list(X_train)), activation='relu'))
-    model.add(Dense(8, activation='relu'))
-    model.add(Dense(4, activation='softmax'))
+    model.add(Dense(12, activation='relu'))
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(64, activation='relu'))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(2, activation='softmax'))
     
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-    results = model.fit(X_train, y_train, epochs=2, verbose=0)
-    print(model.summary())
+    results = model.fit(X_train, y_train, epochs=10, verbose=1)
+    #print(model.summary())
     
     # Evaluate on test set
-    _, accuracy = model.evaluate(X_test, y_test, verbose=0)
+    _, accuracy = model.evaluate(X_test, y_test, verbose=1)
     print("\nAccuracy on test set: {:.3f}".format(accuracy))
+    
+    predict = model.predict(X_test)
+    print(predict)
 
     print() # newline
     return

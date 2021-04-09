@@ -25,9 +25,9 @@ def label_severity(row):
     if row['Severity_Mild'] == 1:
         return 1
     if row['Severity_Moderate'] == 1:
-        return 2
+        return 1
     if row['Severity_Severe'] == 1:
-        return 3
+        return 1
     
 def label_age(row):
     if row['Age_0-9'] == 1:
@@ -61,7 +61,7 @@ def preprocess():
     #Sample original dataset for 10% randomly.  
     filename = "../data/Cleaned-Data.csv" 
     n = sum(1 for line in open(filename))-1  # Calculate number of rows in file
-    s = n//3  # sample size of 10%
+    s = 300000  # sample size of 10%
     skip = sorted(random.sample(range(1, n+1), n-s))  # n+1 to compensate for header 
     df = pandas.read_csv(filename, skiprows=skip)
     print("Sample size: {}".format(df.shape[0]))
@@ -94,10 +94,15 @@ def preprocess():
     print(df['Age_Bracket'].value_counts())
     print(df['Gender'].value_counts())
     print(df['Contact'].value_counts())
+    print(df['Fever'].value_counts())
+    print(df['Tiredness'].value_counts())
+    print(df['Dry-Cough'].value_counts())
+    print(df['Difficulty-in-Breathing'].value_counts())
+    print(df['Sore-Throat'].value_counts())
     print() # newline
     
     #Save dataframe to csv
-    df.to_csv('../data/Experimental-Data.csv', index=False)
+    df.to_csv('../data/Small-Data.csv', index=False)
     
 preprocess()
 
