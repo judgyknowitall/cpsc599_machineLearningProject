@@ -61,7 +61,7 @@ def preprocess():
     #Sample original dataset for 10% randomly.  
     filename = "../data/Cleaned-Data.csv" 
     n = sum(1 for line in open(filename))-1  # Calculate number of rows in file
-    s = 300000  # sample size of 10%
+    s = 10000  # sample size of 10%
     skip = sorted(random.sample(range(1, n+1), n-s))  # n+1 to compensate for header 
     df = pandas.read_csv(filename, skiprows=skip)
     print("Sample size: {}".format(df.shape[0]))
@@ -102,7 +102,7 @@ def preprocess():
     print() # newline
     
     #Save dataframe to csv
-    df.to_csv('../data/Small-Data.csv', index=False)
+    df.to_csv('../data/Binary-Data.csv', index=False)
     
 preprocess()
 
