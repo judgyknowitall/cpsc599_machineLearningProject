@@ -1,13 +1,24 @@
+'''
+CPSC 599 - Machine Learning Project
+Team 7
+
+@author: Abdullah
+
+Graphical User Interface
+'''
+
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
+import traceback
+import numpy as np
 
 class App:
-    def __init__(self, root):
+    def __init__(self, root, model):
         root.title("COVID-19 Severity Predictor")
+        self.loaded_model = model
         self.bg_colour = "#CCCCCC"
         self.default_blue = "#007FFF"
-        self.severity_colour = "black"
         
         # Creating content frame
         mainframe = tk.Frame(root, padx='12', pady='12', bg=self.bg_colour)
@@ -106,7 +117,7 @@ class App:
         age_entry.grid(column=2, row=13, sticky=(W))
 
         tk.Button(mainframe, text="Submit", bg=self.default_blue, fg="white", activeforeground=self.default_blue, activebackground="white",
-                 command=self.get_values, width=33).grid(column=1, row=14, sticky=(N,W), columnspan=2)
+                 command=self.get_values_predict, width=33).grid(column=1, row=14, sticky=(N,W), columnspan=2)
 
         # Widgets for output
         tk.Label(mainframe, text="Prediction", 
@@ -116,7 +127,7 @@ class App:
         tk.Label(mainframe, text="Severity", 
                 fg="black", bg=self.bg_colour).grid(column=3, row=3, sticky=(W), ipadx=20)
         tk.Label(mainframe, textvariable=self.severity, 
-                fg=self.severity_colour, bg=self.bg_colour).grid(column=3, row=4, sticky=(W), ipadx=20)
+                fg="black", bg=self.bg_colour).grid(column=3, row=4, sticky=(W), ipadx=20)
 
         self.confidence = StringVar()
         tk.Label(mainframe, text="Confidence", 
@@ -124,38 +135,49 @@ class App:
         tk.Label(mainframe, textvariable=self.confidence, 
                 fg="black", bg=self.bg_colour).grid(column=3, row=6, sticky=(W), ipadx=20)
 
-        root.bind("<Return>", self.get_values)
+        root.bind("<Return>", self.get_values_predict)
 
-        # Adding padding
+        # Adding padding and focus
         for child in mainframe.winfo_children(): 
             child.grid_configure(padx=5, pady=3)
+        fever_combo.focus()
         
-    def get_values(self, *args):
+    def get_values_predict(self, *args):
+        '''
+        Input order:
+        'Fever', 'Tiredness', 'Dry-Cough', 'Difficulty-in-Breathing', 
+        'Sore-Throat', 'Pains', 'Nasal-Congestion', 'Runny-Nose', 
+        'Diarrhea', 'Severity', 'Age_Bracket', 'Gender', 'Contact'
+        '''
+        user_data = []
         try:
             fever_val = 1 if self.fever.get() == "Yes" else 0
+            user_data.append(fever_val)
+            
             tired_val = 1 if self.tiredness.get() == "Yes" else 0
+            user_data.append(tired_val)
+            
             drycough_val = 1 if self.dry_cough.get() == "Yes" else 0
+            user_data.append(drycough_val)
+            
             difbreath_val = 1 if self.dif_breath.get() == "Yes" else 0
+            user_data.append(difbreath_val)
+            
             sorethroat_val = 1 if self.sore_throat.get() == "Yes" else 0
+            user_data.append(sorethroat_val)
+            
             pains_val = 1 if self.pains.get() == "Yes" else 0
+            user_data.append(pains_val)
+            
             nasalcong_val = 1 if self.nasal_cong.get() == "Yes" else 0
+            user_data.append(nasalcong_val)
+            
             runnynose_val = 1 if self.runny_nose.get() == "Yes" else 0
+            user_data.append(runnynose_val)
+            
             diarrhea_val = 1 if self.diarrhea.get() == "Yes" else 0
+            user_data.append(diarrhea_val)
 
-            if self.gender.get() == "Transgender":
-                gender_val = 0
-            elif self.gender.get() == "Male":
-                gender_val = 1
-            else:
-                gender_val = 2
-            
-            if self.contact.get() == "No":
-                contact_val = 0
-            elif self.contact.get() == "Yes":
-                contact_val = 1
-            else:
-                contact_val = 2
-            
             age_num = int(self.age.get())
             if age_num >= 0 and age_num < 10:
                 age_val = 0
@@ -167,22 +189,40 @@ class App:
                 age_val = 3
             else:
                 age_val = 4
-        
-            print("fever: ", fever_val)
-            print("tired: ", tired_val)
-            print("gender: ", gender_val)
-            print("contact: ", contact_val)
-            print("age: ", age_val)
+            user_data.append(age_val)
 
-            self.severity.set(1)
-        #     self.severity_colour.set("green")
-            self.confidence.set("25%")
+            if self.gender.get() == "Transgender":
+                gender_val = 0
+            elif self.gender.get() == "Male":
+                gender_val = 1
+            else:
+                gender_val = 2
+            user_data.append(gender_val)
+            
+            if self.contact.get() == "No":
+                contact_val = 0
+            elif self.contact.get() == "Yes":
+                contact_val = 1
+            else:
+                contact_val = 2
+            user_data.append(contact_val)
+            
+            # Make prediction on user input
+            user_in = [user_data]
+            prediction = self.loaded_model.predict(user_in)
+            
+            # Process output
+            pred_list = prediction.tolist()
+            model_confidence = max(pred_list[0])
+            severity_level = pred_list[0].index(model_confidence)
+            model_confidence *= 100
+            
+            # Display output to main window
+            self.severity.set(severity_level)
+            self.confidence.set("{:.3f}%".format(model_confidence))
         except ValueError:
             pass
+        except FileNotFoundError:
+            print("Model was not saved")
         except Exception:
-            print("Unexpected Exception")
-
-# Setting up main app window
-root = Tk()
-App(root)
-root.mainloop()
+            traceback.print_exc()
