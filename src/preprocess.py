@@ -60,10 +60,7 @@ def label_contact(row):
 def preprocess():
     #Sample original dataset for 10% randomly.  
     filename = "../data/Cleaned-Data.csv" 
-    n = sum(1 for line in open(filename))-1  # Calculate number of rows in file
-    s = n//3  # sample size of 10%
-    skip = sorted(random.sample(range(1, n+1), n-s))  # n+1 to compensate for header 
-    df = pandas.read_csv(filename, skiprows=skip)
+    df = pandas.read_csv(filename).sample(frac=0.1) # take random 10% of rows
     print("Sample size: {}".format(df.shape[0]))
 
     #Insert Severity column and populate

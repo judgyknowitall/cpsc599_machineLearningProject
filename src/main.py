@@ -9,6 +9,7 @@ Main Function
 import pandas
 from os import path
 from sklearn.model_selection import train_test_split
+
 # Local modules
 from preprocess import preprocess
 from dnn import train_dnn
@@ -22,12 +23,15 @@ from evaluate import compare_models
 def read_processed_data():
 
     # Preprocess data if not done so already
+    '''
     if (not path.exists('../data/Processed-Data.csv')):
         print("Preprocessing Data...\n")
-        #preprocess() #TODO
+        preprocess()
+    '''
+    preprocess() # TODO for expermental only
     
     # Read and split processed data properly
-    processed_data = pandas.read_csv('../data/Processed-Data.csv')
+    processed_data = pandas.read_csv('../data/Experimental-Data.csv')
     y = processed_data.Severity
     x = processed_data.drop("Severity", axis=1)
 
@@ -37,10 +41,10 @@ def read_processed_data():
 # Main function
 def main():
 
-    # train_data = (X_train, y_train), test_data = (X_test, y_test)
-    train_data, test_data = read_processed_data()
+
     x, y = read_processed_data()
     X_train, X_test, y_train, y_test = train_test_split(x, y, stratify=y, train_size=0.7, shuffle=True)
+    
 
     # Create models
     dnn = train_dnn(X_train, y_train)

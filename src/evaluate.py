@@ -55,16 +55,13 @@ def compare_models(models, X_test, y_test):
         
         # F1 score
         f1 = 0
-        if (i != 0):
-            f1 = f1_score(y_test, models[i].predict(X_test), average='macro') 
+        f1 = f1_score(y_test, y_pred, average='macro') 
         
         
         # Print results
         print("Model", i)
         print("\tAccuracy =  {:.3f}".format(score))
-        
-        if (f1 != 0):
-            print("\tF1 scores = {:.3f}".format(f1))
+        print("\tF1 scores = {:.3f}".format(f1))
         
         plot_conf_matrix(y_test, y_pred, "Model " + str(i))
 
