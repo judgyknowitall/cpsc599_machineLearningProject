@@ -6,6 +6,7 @@ Team 7
 @author: Zack
 
 Data Pre-processing v2.0
+Used for experimenting
 """
 import pandas
 import random
@@ -28,6 +29,7 @@ def preprocess():
           'Age_60+','Gender_Female','Gender_Male','Gender_Transgender','Severity_Mild',
           'Severity_Moderate','Severity_None','Severity_Severe','Contact_Dont-Know','Contact_No',
           'Contact_Yes','Country']] = data['Fever,Tiredness,Dry-Cough,Difficulty-in-Breathing,Sore-Throat,None_Sympton,Pains,Nasal-Congestion,Runny-Nose,Diarrhea,None_Experiencing,Age_0-9,Age_10-19,Age_20-24,Age_25-59,Age_60+,Gender_Female,Gender_Male,Gender_Transgender,Severity_Mild,Severity_Moderate,Severity_None,Severity_Severe,Contact_Dont-Know,Contact_No,Contact_Yes,Country'].str.split(',', 26, expand=True)
+    
     del data['Fever,Tiredness,Dry-Cough,Difficulty-in-Breathing,Sore-Throat,None_Sympton,Pains,Nasal-Congestion,Runny-Nose,Diarrhea,None_Experiencing,Age_0-9,Age_10-19,Age_20-24,Age_25-59,Age_60+,Gender_Female,Gender_Male,Gender_Transgender,Severity_Mild,Severity_Moderate,Severity_None,Severity_Severe,Contact_Dont-Know,Contact_No,Contact_Yes,Country']
     del data['Country']
      

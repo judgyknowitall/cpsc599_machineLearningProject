@@ -4,27 +4,22 @@ CPSC 599 - Machine Learning Project
 Team 7
 
 @author: Zack
+Deep Neural Network 
 """
-import matplotlib.pyplot as plt
-import tensorflow as tf
-from tensorflow.keras.layers import Input
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.utils import to_categorical
-from sklearn.model_selection import train_test_split
-import glob
-from numpy import asarray
-import pandas
 
 
 def train_dnn(X_train, y_train):
 
-    print("Training Deep Neural Network ...")
+    print("Training Deep Neural Network...")
     
-    #One-hot encode labels
+    # One-hot encode labels
     y_train = to_categorical(y_train, 4)
     
-    #Create model
+    # Create model
     model = Sequential()
     model.add(Dense(len(list(X_train)), activation='relu'))
     model.add(Dense(8, activation='relu'))

@@ -16,7 +16,11 @@ References:
     https://stackoverflow.com/questions/26886653/pandas-create-new-column-based-on-values-from-other-columns-apply-a-function-o
     https://www.codementor.io/@guidotournois/4-strategies-to-deal-with-large-datasets-using-pandas-qdw3an95k
 """
+
 import pandas
+
+
+# Label-processing Functions
 
 def label_severity(row):
     if row['Severity_None'] == 1:
@@ -57,6 +61,7 @@ def label_contact(row):
         return 2
  
 
+# Preprocess data and save as Processed-Data.csv
 def preprocess():
     
     print("Preprocessing Data...")
@@ -89,20 +94,12 @@ def preprocess():
                             , 'Contact_Dont-Know', 'Contact_No', 'Contact_Yes'])
     
     #Generate report on final processed dataset
-    print(list(df))
-    print(df['Severity'].value_counts())
-    print(df['Age_Bracket'].value_counts())
-    print(df['Gender'].value_counts())
-    print(df['Contact'].value_counts())
-    print(df['Fever'].value_counts())
-    print(df['Tiredness'].value_counts())
-    print(df['Dry-Cough'].value_counts())
-    print(df['Difficulty-in-Breathing'].value_counts())
-    print(df['Sore-Throat'].value_counts())
+    print('\nFeatures:\n', list(df))
+    print('\nNumber of data samples per label:\n', df['Severity'].value_counts())
     print() # newline
     
     #Save dataframe to csv
-    df.to_csv('../data/Experimental-Data.csv', index=False)
+    df.to_csv('../data/Processed-Data.csv', index=False)
     
 
 

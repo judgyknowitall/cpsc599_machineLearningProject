@@ -7,7 +7,6 @@ Main Function
 """
 # External modules
 import pandas
-from os import path
 from tkinter import Tk
 from sklearn.model_selection import train_test_split
 
@@ -19,24 +18,21 @@ from logReg import train_logReg
 from evaluate import compare_models
 from gui import App
 
+
 # Read CSV files and extract features and labels
 def read_processed_data():
 
-    # Preprocess data if not done so already
-    '''
-    if (not path.exists('../data/Processed-Data.csv')):
-        print("Preprocessing Data...\n")
-        preprocess()
-    '''
-    preprocess() # TODO for expermental only
+    # Preprocess data and save as a csv file
+    preprocess()
     
     # Read and split processed data properly
-    processed_data = pandas.read_csv('../data/Experimental-Data.csv')
+    processed_data = pandas.read_csv('../data/Processed-Data.csv')
     
     y = processed_data.Severity
     x = processed_data.drop("Severity", axis=1)
 
     return x, y
+
 
 # Main function
 def main():
@@ -64,9 +60,12 @@ def main():
     print("The Highest score was: {:.3f}".format(best_score))
 
     # Start GUI. User input is taken and predicition is made
+    print("Starting GUI...")
     root = Tk()
     App(root, models[best_model_index])
     root.mainloop()
+    print("GUI Closed...")
   
+    
 if __name__ == "__main__":
     main()

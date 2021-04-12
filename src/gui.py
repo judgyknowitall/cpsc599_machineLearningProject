@@ -11,10 +11,12 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 import traceback
-import numpy as np
+
 
 class App:
+    
     def __init__(self, root, model):
+        
         root.title("COVID-19 Severity Predictor")
         self.loaded_model = model
         self.bg_colour = "#CCCCCC"
@@ -142,42 +144,49 @@ class App:
             child.grid_configure(padx=5, pady=3)
         fever_combo.focus()
         
+        
+    # Process User Input Values and Predict
     def get_values_predict(self, *args):
-        '''
-        Input order:
-        'Fever', 'Tiredness', 'Dry-Cough', 'Difficulty-in-Breathing', 
-        'Sore-Throat', 'Pains', 'Nasal-Congestion', 'Runny-Nose', 
-        'Diarrhea', 'Severity', 'Age_Bracket', 'Gender', 'Contact'
-        '''
         user_data = []
+        
         try:
+            # Fever 
             fever_val = 1 if self.fever.get() == "Yes" else 0
             user_data.append(fever_val)
             
+            # Tiredness
             tired_val = 1 if self.tiredness.get() == "Yes" else 0
             user_data.append(tired_val)
             
+            # Dry-Cough
             drycough_val = 1 if self.dry_cough.get() == "Yes" else 0
             user_data.append(drycough_val)
             
+            # Difficulty-in-Breathing
             difbreath_val = 1 if self.dif_breath.get() == "Yes" else 0
             user_data.append(difbreath_val)
             
+            # Sore-throat
             sorethroat_val = 1 if self.sore_throat.get() == "Yes" else 0
             user_data.append(sorethroat_val)
             
+            # Pains
             pains_val = 1 if self.pains.get() == "Yes" else 0
             user_data.append(pains_val)
             
+            # Nasal-Congestion
             nasalcong_val = 1 if self.nasal_cong.get() == "Yes" else 0
             user_data.append(nasalcong_val)
             
+            # Runny-Nose
             runnynose_val = 1 if self.runny_nose.get() == "Yes" else 0
             user_data.append(runnynose_val)
             
+            # Diarrhea
             diarrhea_val = 1 if self.diarrhea.get() == "Yes" else 0
             user_data.append(diarrhea_val)
 
+            # Age
             age_num = int(self.age.get())
             if age_num >= 0 and age_num < 10:
                 age_val = 0
@@ -185,12 +194,13 @@ class App:
                 age_val = 1
             elif age_num >= 20 and age_num < 25:
                 age_val = 2
-            elif age_num >= 25 and age_num <60:
+            elif age_num >= 25 and age_num < 60:
                 age_val = 3
             else:
                 age_val = 4
             user_data.append(age_val)
 
+            # Gender
             if self.gender.get() == "Transgender":
                 gender_val = 0
             elif self.gender.get() == "Male":
@@ -199,6 +209,7 @@ class App:
                 gender_val = 2
             user_data.append(gender_val)
             
+            # Contact
             if self.contact.get() == "No":
                 contact_val = 0
             elif self.contact.get() == "Yes":

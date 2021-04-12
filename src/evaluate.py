@@ -20,7 +20,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.metrics import f1_score, accuracy_score
-from tensorflow.keras.utils import to_categorical
 
 
 # Calculate accuracies
@@ -31,9 +30,10 @@ def compare_models(models, X_test, y_test):
     best_model_index = -1
     best_score = 0
     
+    # Iterate over models
     for i in range(len(models)):
         
-        # No model should be empty
+        # No model should be null
         if (models[i] == None):
             continue
     
@@ -62,10 +62,7 @@ def compare_models(models, X_test, y_test):
         print("Model", i)
         print("\tAccuracy =  {:.3f}".format(score))
         print("\tF1 scores = {:.3f}".format(f1))
-        
         plot_conf_matrix(y_test, y_pred, "Model " + str(i))
-
-            
         print() # newline
 
     
