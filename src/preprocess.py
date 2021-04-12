@@ -17,7 +17,6 @@ References:
     https://www.codementor.io/@guidotournois/4-strategies-to-deal-with-large-datasets-using-pandas-qdw3an95k
 """
 import pandas
-import random
 
 def label_severity(row):
     if row['Severity_None'] == 1:
@@ -56,11 +55,15 @@ def label_contact(row):
         return 1
     if row['Contact_Dont-Know'] == 1:
         return 2
+ 
 
 def preprocess():
+    
+    print("Preprocessing Data...")
+    
     #Sample original dataset for 10% randomly.  
     filename = "../data/Cleaned-Data.csv" 
-    df = pandas.read_csv(filename).sample(frac=0.1) # take random 10% of rows
+    df = pandas.read_csv(filename).sample(frac=0.1)
     print("Sample size: {}".format(df.shape[0]))
 
     #Insert Severity column and populate
@@ -80,7 +83,7 @@ def preprocess():
     df['Contact'] = df.apply (lambda row: label_contact(row), axis=1)
     
     #Remove columns: Country(Not applicable), None_Experiencing(Redundant), Rest(Compressed)
-    df = df.drop(columns = ['None_Sympton','Country', 'None_Experiencing', 'Age_0-9', 'Age_10-19', 'Age_20-24'
+    df = df.drop(columns = ['Country', 'None_Sympton', 'None_Experiencing', 'Age_0-9', 'Age_10-19', 'Age_20-24'
                             , 'Age_25-59', 'Age_60+', 'Gender_Female', 'Gender_Male', 'Gender_Transgender'
                             , 'Severity_Mild', 'Severity_Moderate', 'Severity_None', 'Severity_Severe'
                             , 'Contact_Dont-Know', 'Contact_No', 'Contact_Yes'])
@@ -91,10 +94,15 @@ def preprocess():
     print(df['Age_Bracket'].value_counts())
     print(df['Gender'].value_counts())
     print(df['Contact'].value_counts())
+    print(df['Fever'].value_counts())
+    print(df['Tiredness'].value_counts())
+    print(df['Dry-Cough'].value_counts())
+    print(df['Difficulty-in-Breathing'].value_counts())
+    print(df['Sore-Throat'].value_counts())
     print() # newline
     
     #Save dataframe to csv
     df.to_csv('../data/Experimental-Data.csv', index=False)
     
-#preprocess()
+
 
