@@ -6,11 +6,13 @@ Team 7
 @author: Abdullah
 
 Logistic Regression model
+
+References:
+    https://machinelearningmastery.com/multinomial-logistic-regression-with-python/
 """
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
-
 
 def train_logReg(X_train, y_train):
     
@@ -39,8 +41,6 @@ def train_logReg(X_train, y_train):
     
     logReg = LogisticRegression(multi_class='multinomial', solver=best_solver)
     logReg.fit(X_train, y_train)
-    
-
     
     print() # newline
     return logReg

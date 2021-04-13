@@ -5,13 +5,15 @@ Team 7
 @author: Abdullah
 
 Graphical User Interface
+
+References:
+        https://tkdocs.com/tutorial/index.html
 '''
 
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 import traceback
-
 
 class App:
     
@@ -144,7 +146,6 @@ class App:
             child.grid_configure(padx=5, pady=3)
         fever_combo.focus()
         
-        
     # Process User Input Values and Predict
     def get_values_predict(self, *args):
         user_data = []
@@ -230,10 +231,8 @@ class App:
             
             # Display output to main window
             self.severity.set(severity_level)
-            self.confidence.set("{:.3f}%".format(model_confidence))
+            self.confidence.set("{:.2f}%".format(model_confidence))
         except ValueError:
             pass
-        except FileNotFoundError:
-            print("Model was not saved")
         except Exception:
             traceback.print_exc()
