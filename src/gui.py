@@ -17,12 +17,13 @@ import traceback
 
 class App:
     
-    def __init__(self, root, model):
+    def __init__(self, root, model, model_type):
         
         root.title("COVID-19 Severity Predictor")
         self.loaded_model = model
         self.bg_colour = "#CCCCCC"
         self.default_blue = "#007FFF"
+        self.model_type = model_type
         
         # Creating content frame
         mainframe = tk.Frame(root, padx='12', pady='12', bg=self.bg_colour)
@@ -221,7 +222,10 @@ class App:
             
             # Make prediction on user input
             user_in = [user_data]
-            prediction = self.loaded_model.predict(user_in)
+            if(self.model_type == 1 or self.model_type == 2):
+                prediction = self.loaded_model.predict_proba(user_in)
+            else:
+                prediction = self.loaded_model.predict(user_in)
             
             # Process output
             pred_list = prediction.tolist()
