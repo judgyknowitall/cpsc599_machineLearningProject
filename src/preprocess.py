@@ -16,11 +16,14 @@ References:
     https://stackoverflow.com/questions/26886653/pandas-create-new-column-based-on-values-from-other-columns-apply-a-function-o
     https://www.codementor.io/@guidotournois/4-strategies-to-deal-with-large-datasets-using-pandas-qdw3an95k
 """
+
 import pandas
 import random
 from sklearn.utils import resample
 from sklearn.utils import shuffle
 
+
+# Label-processing Functions
 def label_severity(row):
     if row['Severity_None'] == 1:
         return 0
@@ -58,14 +61,16 @@ def label_contact(row):
         return 1
     if row['Contact_Dont-Know'] == 1:
         return 2
+ 
 
+# Preprocess data and save as Processed-Data.csv
 def preprocess():
+    
+    print("Preprocessing Data...")
+    
     #Sample original dataset for 10% randomly.  
     filename = "../data/Cleaned-Data.csv" 
-    n = sum(1 for line in open(filename))-1  # Calculate number of rows in file
-    s = 50000  # sample size of 10%
-    skip = sorted(random.sample(range(1, n+1), n-s))  # n+1 to compensate for header 
-    df = pandas.read_csv(filename, skiprows=skip)
+    df = pandas.read_csv(filename).sample(frac=0.1)
     print("Sample size: {}".format(df.shape[0]))
 
     #Insert Severity column and populate
@@ -85,41 +90,18 @@ def preprocess():
     df['Contact'] = df.apply (lambda row: label_contact(row), axis=1)
     
     #Remove columns: Country(Not applicable), None_Experiencing(Redundant), Rest(Compressed)
-    df = df.drop(columns = ['None_Sympton','Country', 'None_Experiencing', 'Age_0-9', 'Age_10-19', 'Age_20-24'
+    df = df.drop(columns = ['Country', 'None_Sympton', 'None_Experiencing', 'Age_0-9', 'Age_10-19', 'Age_20-24'
                             , 'Age_25-59', 'Age_60+', 'Gender_Female', 'Gender_Male', 'Gender_Transgender'
                             , 'Severity_Mild', 'Severity_Moderate', 'Severity_None', 'Severity_Severe'
                             , 'Contact_Dont-Know', 'Contact_No', 'Contact_Yes'])
     
-    #Balance set
-    df_majority = df[df.Severity==1]
-    df_minority = df[df.Severity==0]
-    
-    # # Upsample minority class
-    df_majority_undersampled = resample(df_majority, 
-                                      replace=False,
-                                      n_samples=len(df_minority),
-                                      random_state=42)
-    
-    # Combine majority class with upsampled minority class
-    df_binary = pandas.concat([df_majority_undersampled, df_minority])
-    df_binary = shuffle(df_binary)
-
-    
     #Generate report on final processed dataset
-    print(list(df))
-    print(df['Severity'].value_counts())
-    print(df['Age_Bracket'].value_counts())
-    print(df['Gender'].value_counts())
-    print(df['Contact'].value_counts())
-    print(df['Fever'].value_counts())
-    print(df['Tiredness'].value_counts())
-    print(df['Dry-Cough'].value_counts())
-    print(df['Difficulty-in-Breathing'].value_counts())
-    print(df['Sore-Throat'].value_counts())
+    print('\nFeatures:\n', list(df))
+    print('\nNumber of data samples per label:\n', df['Severity'].value_counts())
     print() # newline
     
     #Save dataframe to csv
     df.to_csv('../data/Processed-Data.csv', index=False)
     
-preprocess()
+
 

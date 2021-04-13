@@ -6,58 +6,41 @@ Team 7
 @author: Abdullah
 
 Logistic Regression model
+
+References:
+    https://machinelearningmastery.com/multinomial-logistic-regression-with-python/
 """
 
-import pandas as pd
-from numpy import mean
-from numpy import std
-from collections import Counter
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import RepeatedStratifiedKFold
 
 def train_logReg(X_train, y_train):
     
     print("Training Logistic Regression Model ...")
+    
+    
+    # Use K-Fold Cross Validation to pick best solver function
+    folds = 5
+    
+    best_solver = 'lbfgs'
+    best_score = 0
+    
     # For multiclass problems, can only use ‘newton-cg’, ‘sag’, ‘saga’ and ‘lbfgs’
-    model = LogisticRegression(multi_class='multinomial', solver='lbfgs')
-    
-    # Separate labels from data
-    '''labels = data["Severity"]
-    data.drop("Severity", axis=1, inplace=True)
-    data.drop("Contact", axis=1, inplace=True)
-    
-    X_train, X_test, y_train, y_test = train_test_split(
-        data, labels, stratify=labels, test_size=0.3)'''
+    for solver in ['newton-cg', 'sag', 'saga', 'lbfgs']:
 
-    # Training set summary
-    # print(X_train.shape, y_train.shape)
-    # print(Counter(y_train))
-    
-    # Define the model evaluation procedure
-    cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
+        model = LogisticRegression(multi_class='multinomial', solver=solver)
+        score = cross_val_score(model, X_train, y_train, scoring='accuracy', cv=folds, n_jobs=-1).mean()
+        
+        if (score > best_score):
+            best_score = score
+            best_solver = solver
+        
 
     # Evaluate the model and collect the scores
-    n_scores = cross_val_score(
-        model, X_train, y_train, scoring='accuracy', cv=cv, n_jobs=-1)
+    print('Best Accuracy achieved with solver "' + best_solver + '": %.3f' % (best_score))
     
-    print('Mean Accuracy: %.3f (%.3f)' % (mean(n_scores), std(n_scores)))
-
-    
-    model.fit(X_train, y_train)
+    logReg = LogisticRegression(multi_class='multinomial', solver=best_solver)
+    logReg.fit(X_train, y_train)
     
     print() # newline
-    return model
-
-
-'''
-Driver function
-
-def main():
-    data = pd.read_csv("../data/Processed-Data.csv")
-    train_logReg(data)
-
-if __name__ == "__main__":
-    main()
-    '''
+    return logReg
