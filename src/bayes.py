@@ -29,7 +29,7 @@ def train_bayes(X_train, y_train):
         
         if (score > best_score):
             best_score = score
-            best_alpha = alpha
+            best_alpha = round(alpha,1)
         
 
     # Evaluate the model and collect the scores
