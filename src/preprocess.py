@@ -18,9 +18,6 @@ References:
 """
 
 import pandas
-import random
-from sklearn.utils import resample
-from sklearn.utils import shuffle
 
 
 # Label-processing Functions

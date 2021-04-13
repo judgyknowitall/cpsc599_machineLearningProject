@@ -28,7 +28,7 @@ def train_dnn(X_train, y_train):
     model.add(Dense(4, activation='softmax'))
     
 
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     model.fit(X_train, y_train, epochs=20, verbose=1)
 
     print(model.summary())
