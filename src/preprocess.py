@@ -18,6 +18,8 @@ References:
 """
 import pandas
 import random
+from sklearn.utils import resample
+from sklearn.utils import shuffle
 
 def label_severity(row):
     if row['Severity_None'] == 1:
@@ -25,9 +27,9 @@ def label_severity(row):
     if row['Severity_Mild'] == 1:
         return 1
     if row['Severity_Moderate'] == 1:
-        return 1
+        return 2
     if row['Severity_Severe'] == 1:
-        return 1
+        return 3
     
 def label_age(row):
     if row['Age_0-9'] == 1:
@@ -61,7 +63,7 @@ def preprocess():
     #Sample original dataset for 10% randomly.  
     filename = "../data/Cleaned-Data.csv" 
     n = sum(1 for line in open(filename))-1  # Calculate number of rows in file
-    s = 10000  # sample size of 10%
+    s = 50000  # sample size of 10%
     skip = sorted(random.sample(range(1, n+1), n-s))  # n+1 to compensate for header 
     df = pandas.read_csv(filename, skiprows=skip)
     print("Sample size: {}".format(df.shape[0]))
@@ -88,6 +90,21 @@ def preprocess():
                             , 'Severity_Mild', 'Severity_Moderate', 'Severity_None', 'Severity_Severe'
                             , 'Contact_Dont-Know', 'Contact_No', 'Contact_Yes'])
     
+    #Balance set
+    df_majority = df[df.Severity==1]
+    df_minority = df[df.Severity==0]
+    
+    # # Upsample minority class
+    df_majority_undersampled = resample(df_majority, 
+                                      replace=False,
+                                      n_samples=len(df_minority),
+                                      random_state=42)
+    
+    # Combine majority class with upsampled minority class
+    df_binary = pandas.concat([df_majority_undersampled, df_minority])
+    df_binary = shuffle(df_binary)
+
+    
     #Generate report on final processed dataset
     print(list(df))
     print(df['Severity'].value_counts())
@@ -102,7 +119,7 @@ def preprocess():
     print() # newline
     
     #Save dataframe to csv
-    df.to_csv('../data/Binary-Data.csv', index=False)
+    df.to_csv('../data/Processed-Data.csv', index=False)
     
 preprocess()
 
