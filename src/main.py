@@ -62,7 +62,7 @@ def main():
     # Start GUI. User input is taken and predicition is made
     print("Starting GUI...")
     root = Tk()
-    App(root, models[best_model_index])
+    App(root, models[best_model_index], best_model_index)
     root.mainloop()
     print("GUI Closed...")
   
